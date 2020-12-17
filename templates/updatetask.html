@@ -1,4 +1,4 @@
-
+{{ task.title }}
 <link rel="stylesheet"href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/south-street/jquery-ui.min.css" integrity="sha256-/8xGgcV6Mp9fFa2u2lLYOWYNluCdrHEvBfiwhpkD/Js=" crossorigin="anonymous" />
@@ -31,7 +31,7 @@
 
 <style>
 	body{
-		background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(33,138,47,1) 100%);
+		background: linear-gradient(#84c1cd, rgba(132, 193, 205, 0.6) 100%);
 	}
 	input{
 		width: 100%;
@@ -48,7 +48,7 @@
 		box-shadow: 6px 2px 30px 0px rgba(0,0,0,0.75);
 	}
 	.item-row{
-		background-color: #218a2f;
+		background-color: #84c1cd;
 		margin: 10px;
 		padding: 20px;
 		border-radius: 3px;
@@ -60,17 +60,29 @@
 		background-color:  #218a2f;
 		color: blue;
 	}
+
+	.edit{
+	    background-color: skyblue;
+	    color: black;
+	    width: 100%;
+	 }
+	 .list{
+	    background-color: skyblue;
+	    color: black;
+	    width: 100%;
+	 }
+
 </style>
 
 <div class="container">
 
 
-	<p><a class="btn btn-sm btn-success" href="{% url 'task_list' %}" >Back to list</a></p>
+	<p><a class="btn btn-sm btn-success list" href="{% url 'task_list' %}" >Back to list</a></p>
 	<b>Update Task</b><p>
 
 	<form method="POST" action="">{% csrf_token %}
 		{{form}}
-		<input class="btn btn-sm btn-success" type="submit" value="Edit" name="Edit">
+		<input class="btn btn-sm btn-success edit" type="submit" value="Edit" name="Edit">
     {% if Task.status == True %}
 			<strike>{{Task}}</strike>
 			{% else %}
