@@ -1,4 +1,4 @@
-
+<title>Delete | {{ title }}</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/south-street/jquery-ui.min.css" integrity="sha256-/8xGgcV6Mp9fFa2u2lLYOWYNluCdrHEvBfiwhpkD/Js=" crossorigin="anonymous" />
@@ -57,9 +57,10 @@
 
 <div class="container">
 
-	<b>Deleting "<span style="color: red;">{{item}}</span>" is parmanent... do you want to proceed?<br>
+	<b>Deleting "<span style="color: red;">{{item}}</span>" is parmanent... Do you want to proceed?<br><br>
 
 	<a class="btn btn-sm btn-success No" href="{% url 'task_list' %}" >No</a>
+		<br>
 
 	<form method="POST" action="">{% csrf_token %}
 		<input class="btn btn-sm btn-danger" type="submit" value="Yes Delete" name="Yes">

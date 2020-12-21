@@ -18,16 +18,8 @@
   crossorigin="anonymous">
 </script>
 
-<script>
-    $(document).ready(function(){
-      var date_input=$('input[name="complete_time"]');
-      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-      var options={
-        dateFormat: 'yy-mm-dd',
-      };
-      date_input.datepicker(options);
-    })
-</script>
+
+
 
 <style>
 	body{
@@ -74,14 +66,19 @@
 	background-color: #dc3545;
 	border-radius: 5px;
 	padding: 5px;
+    }
 
-}
+    .done{
+	background-color: #3cb371;
+	border-radius: 5px;
+	padding: 5px;
+    }
 </style>
 <span style="position: center;"><h1>TODO List</h1></span>
 <div class="container">
 	<form method='GET' action=''>
-		<input type='text' name='q' placeholder='Search todo' value='{{ request.GET.q }}'/>
-		<input type='submit' value='Search' />
+		{{searchfilter.form}}
+		<input type='submit' value='Search'/>
 	</form>
 	<form method="POST" action="/">
 		{% csrf_token %}
@@ -93,16 +90,35 @@
 		<div class="item-row">
 			<a class="btn btn-sm btn-light edit" href="{% url 'update_task' task.id %}">Edit</a>
 			<a class="btn btn-sm btn-light delete" href="{% url 'delete_task' task.id %}">Delete</a>
+		    <h5><small>{{ task.create_time|timesince }}</small></h5>
 			{% if task.status == True %}
-			<strike>{{task}}, {{task.complete_time}}</strike>
+			<span class="done" style="float:right"><b>Completed</b> {{task.create_time}}</span>
 			{% else %}
-			<span>{{task}}</span>
-			<span style="float: right;" class="timer"><b>Complete within:</b> {{ task.complete_time|timeuntil }}</span>
+			<span style="float: right;" class="timer"><b>Complete within:</b> {{ task.complete_time |timeuntil }}</span>
 			{% endif %}
 			<span>{{task}}</span>
 		</div>
-	{% endfor %}
 
+	{% endfor %}
+<div class="pagination">
+    <span class="step-links" style="color:#E7755D">
+        {% if tasks.has_previous %}
+            <a href="?{{ page_request_var }}={{ tasks.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ tasks.number }} of {{ tasks.paginator.num_pages }}.
+        </span>
+
+        {% if tasks.has_next %}
+            <a href="?{{ page_request_var }}={{ tasks.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">next</a>
+         <a href="?{{ page_request_var }}={{ tasks.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+    <br>Total tasks : {{ total_tasks }}
+    <br>Completed tasks: {{ completed_tasks }}
+	<br>Percentage : {{ percentage }}
 	</div>
 </div>
 

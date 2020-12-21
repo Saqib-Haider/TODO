@@ -1,4 +1,4 @@
-{{ task.title }}
+<title>Edit | {{ title }}</title>
 <link rel="stylesheet"href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/south-street/jquery-ui.min.css" integrity="sha256-/8xGgcV6Mp9fFa2u2lLYOWYNluCdrHEvBfiwhpkD/Js=" crossorigin="anonymous" />
@@ -77,14 +77,15 @@
 <div class="container">
 
 
-	<p><a class="btn btn-sm btn-success list" href="{% url 'task_list' %}" >Back to list</a></p>
+	<p><a class="btn btn-sm btn-light list" href="{% url 'task_list' %}" >Back to list</a></p>
 	<b>Update Task</b><p>
 
 	<form method="POST" action="">{% csrf_token %}
 		{{form}}
+	    {{complete_form}}
 		<input class="btn btn-sm btn-success edit" type="submit" value="Edit" name="Edit">
     {% if Task.status == True %}
-			<strike>{{Task}}</strike>
+			<strike>{{Task}}{{mark}}</strike>
 			{% else %}
     {% endif %}
 	</form>
