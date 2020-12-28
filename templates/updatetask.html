@@ -82,7 +82,6 @@
 
 	<form method="POST" action="">{% csrf_token %}
 		{{form}}
-	    {{complete_form}}
 		<input class="btn btn-sm btn-success edit" type="submit" value="Edit" name="Edit">
     {% if Task.status == True %}
 			<strike>{{Task}}{{mark}}</strike>

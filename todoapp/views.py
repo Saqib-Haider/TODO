@@ -4,9 +4,10 @@ from .models import Task
 from .forms import TaskForm,UpdateTaskForm
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from .filters import TaskFilter
-from django.views.generic import UpdateView, DeleteView
+from django.views.generic import UpdateView, DeleteView, ListView
 from .serializers import TaskSerializer
 from rest_framework import generics
+from django.views.generic.edit import FormMixin
 
 
 
@@ -25,7 +26,7 @@ class TaskDetailApi(generics.RetrieveUpdateDestroyAPIView):
 
 class TaskUpdateView(UpdateView):
     template_name = 'updatetask.html'
-    form_class = TaskForm
+    form_class = UpdateTaskForm
     queryset = Task.objects.all()
 
     def get_object(self, *args, **kwargs):
@@ -41,11 +42,45 @@ class TaskUpdateView(UpdateView):
 
 class TaskDeleteView(DeleteView):
     template_name = 'deletetask.html'
+
     def get_object(self, *args, **kwargs):
         id = self.kwargs.get("id")
         return get_object_or_404(Task, id=id)
     def get_success_url(self):
         return reverse('task_list')
+
+
+class TaskListView(FormMixin,ListView):
+	template_name = 'tasklist.html'
+	form_class = TaskForm
+	model = Task
+	#paginate_by = 10
+	context_object_name = 'tasks'
+	queryset = Task.objects.all().order_by('-create_time', 'complete_time')
+
+
+	def get_context_data(self, *, object_list=None, **kwargs):
+		context=super().get_context_data(**kwargs)
+		context['searchfilter']= TaskFilter(self.request.GET, queryset=self.get_queryset())
+		context['completed_tasks'] = Task.objects.filter(status=True).count()
+		context['total_tasks'] = Task.objects.all().count()
+		context['percentage'] = context['completed_tasks'] / context['total_tasks'] * 100
+		return context
+
+	def post(self, request, *args, **kwargs):
+		form = self.get_form()
+		if form.is_valid():
+			form.save()
+		return super().form_valid(form)
+	success_url = ('/')
+
+	def get_queryset(self):
+		qs = self.model.objects.all()
+		searchfilter= TaskFilter(self.request.GET, queryset=qs)
+		return searchfilter.qs
+
+
+
 
 
 def task_list(request):
@@ -55,7 +90,6 @@ def task_list(request):
 
 	completed_tasks = task.filter(status=True).count()
 	total_tasks = task.count()
-	#percentage = completed_tasks / total_tasks * 100
 	if total_tasks != 0:
 		percentage = completed_tasks / total_tasks * 100
 	else:

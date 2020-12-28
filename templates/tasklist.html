@@ -80,7 +80,7 @@
 		{{searchfilter.form}}
 		<input type='submit' value='Search'/>
 	</form>
-	<form method="POST" action="/">
+	<form method="POST" action="">
 		{% csrf_token %}
 		{{form}}
 		<input class="btn save" type="submit" name="save">
